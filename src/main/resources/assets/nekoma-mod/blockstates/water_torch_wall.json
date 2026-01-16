@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "nekoma-mod:block/water_torch_wall_block" },
+    "facing=south": { "model": "nekoma-mod:block/water_torch_wall_block", "y": 180 },
+    "facing=west":  { "model": "nekoma-mod:block/water_torch_wall_block", "y": 270 },
+    "facing=east":  { "model": "nekoma-mod:block/water_torch_wall_block", "y": 90 }
+  }
+}

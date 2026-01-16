@@ -25,7 +25,7 @@ public class ModItems {
             WATER_TORCH_ID,
             new VerticallyAttachableBlockItem(
                     ModBlocks.WATER_TORCH_BLOCK,
-                    ModBlocks.WATER_TORCH_BLOCK,
+                    ModBlocks.WATER_TORCH_WALL_BLOCK,
                     Direction.DOWN,
                     new Item.Settings().registryKey(WATER_TORCH_KEY)
             )
