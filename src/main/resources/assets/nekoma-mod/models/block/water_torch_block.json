@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube-all",
+  "textures": {
+    "all": "nekoma-mod:item/water_torch"
+  }
+}

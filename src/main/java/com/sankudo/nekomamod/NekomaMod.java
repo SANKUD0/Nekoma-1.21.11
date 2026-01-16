@@ -1,5 +1,6 @@
 package com.sankudo.nekomamod;
 
+import com.sankudo.nekomamod.block.ModBlocks;
 import com.sankudo.nekomamod.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 
@@ -13,5 +14,6 @@ public class NekomaMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
         ModItems.registerModItems();
+        ModBlocks.registerModBlocks();
 	}
 }

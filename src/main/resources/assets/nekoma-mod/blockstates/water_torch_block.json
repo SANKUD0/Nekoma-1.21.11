@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "nekoma-mod:block/water_torch_block"
+    }
+  }
+}

@@ -1,3 +1,5 @@
 {
-  "item.nekoma-mod.water_torch": "Water Torch"
+  "item.nekoma-mod.water_torch": "Water Torch",
+
+  "block.nekoma-mod.water_torch_block": "Water Torch 2"
 }
