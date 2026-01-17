@@ -1,6 +1,7 @@
 package com.sankudo.nekomamod.block.custom;
 
 import net.minecraft.block.*;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
@@ -25,10 +26,8 @@ public class WaterTorchWallBlock extends WallTorchBlock implements Waterloggable
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
     public WaterTorchWallBlock(Settings settings) {
-        super(ParticleTypes.FLAME, settings);
-        this.setDefaultState(this.getDefaultState()
-                .with(WATERLOGGED, false)
-                .with(FACING, Direction.NORTH));
+        super(ParticleTypes.GLOW, settings.pistonBehavior(PistonBehavior.DESTROY));
+        this.setDefaultState(this.getDefaultState().with(WATERLOGGED, false).with(FACING, Direction.NORTH));
     }
 
     @Override
@@ -51,24 +50,6 @@ public class WaterTorchWallBlock extends WallTorchBlock implements Waterloggable
         return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
     }
 
-    // ✅ support “mur” : bloc derrière la torche
-    @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        Direction facing = state.get(FACING);
-        BlockPos supportPos = pos.offset(facing.getOpposite());
-        return Block.sideCoversSmallSquare(world, supportPos, facing);
-    }
-
-    // ✅ drop si le support casse
-    @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, WireOrientation wireOrientation, boolean notify) {
-        if (!this.canPlaceAt(state, world, pos)) {
-            world.breakBlock(pos, true);
-            return;
-        }
-        super.neighborUpdate(state, world, pos, block, wireOrientation, notify);
-    }
-
     @Override
     protected ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
         return super.getPickStack(world, pos, state, includeData);
@@ -79,16 +60,24 @@ public class WaterTorchWallBlock extends WallTorchBlock implements Waterloggable
         return VoxelShapes.empty();
     }
 
-    // mêmes particules glow squid “pur”
+    // particle
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         if (!state.get(WATERLOGGED)) return;
-        if (random.nextInt(6) != 0) return;
 
-        double x = pos.getX() + 0.5 + (random.nextDouble() - 0.5) * 0.25;
-        double y = pos.getY() + 0.65 + (random.nextDouble() - 0.5) * 0.25;
-        double z = pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 0.25;
+        double x = pos.getX() + 0.5;
+        double y = pos.getY() + 0.75;
+        double z = pos.getZ() + 0.5;
 
-        world.addParticleClient(ParticleTypes.GLOW, x, y, z, 0.0, 0.01, 0.0);
+        x += (random.nextDouble() - 0.5) * 0.05;
+        z += (random.nextDouble() - 0.5) * 0.05;
+
+        if (random.nextInt(2) == 0) {
+            world.addParticleClient(ParticleTypes.GLOW, x, y, z, 0.0, 0.01, 0.0);
+        }
+
+        if (random.nextInt(20) == 0) {
+            world.addParticleClient(ParticleTypes.BUBBLE, x, y - 0.05, z, 0.0, 0.02, 0.0);
+        }
     }
 }

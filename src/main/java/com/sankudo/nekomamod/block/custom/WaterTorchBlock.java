@@ -2,6 +2,7 @@ package com.sankudo.nekomamod.block.custom;
 
 import com.sankudo.nekomamod.item.ModItems;
 import net.minecraft.block.*;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
@@ -30,7 +31,7 @@ public class WaterTorchBlock extends TorchBlock implements Waterloggable {
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
     public WaterTorchBlock(Settings settings) {
-        super(ParticleTypes.GLOW, settings);
+        super(ParticleTypes.GLOW, settings.pistonBehavior(PistonBehavior.DESTROY));
         this.setDefaultState(this.getDefaultState().with(WATERLOGGED, false));
     }
 
@@ -92,27 +93,6 @@ public class WaterTorchBlock extends TorchBlock implements Waterloggable {
     @Override
     public FluidState getFluidState(BlockState state) {
         return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
-    }
-
-    // Interdit de placer une water torch par-dessus une autre
-    @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        BlockState below = world.getBlockState(pos.down());
-        // Si dessous = la même water torch => interdit
-        if (below.isOf(this)) return false;
-
-        // Sinon: comportement standard "doit être supporté"
-        return Block.sideCoversSmallSquare(world, pos.down(), Direction.UP);
-    }
-
-    // Drop si le support case
-    @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, WireOrientation wireOrientation, boolean notify) {
-        if (!this.canPlaceAt(state, world, pos)) {
-            world.breakBlock(pos, true); // ✅ true = drop
-            return;
-        }
-        super.neighborUpdate(state, world, pos, block, wireOrientation, notify);
     }
 
     @Override
